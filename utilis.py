@@ -37,6 +37,7 @@ def create_vocabulary(path, min_word_freq=5):
                 f.write(word + '\n')
 
 
+# real-time metric class
 class AverageMeter(object):
     def __init__(self):
         self.reset()
@@ -52,6 +53,7 @@ class AverageMeter(object):
         self.sum += val * n
         self.count += n
         self.avg = self.sum / self.count 
+
 
 
 if __name__ == "__main__":
