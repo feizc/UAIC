@@ -1,14 +1,16 @@
 from transformers import * 
 import torch.nn as nn
 import torch 
+from torch.nn import CrossEntropyLoss 
+
 
 class UAIC(BertPreTrainedModel):
     def __init__(self, config):
         super(UAIC, self).__init__(config)
         self.transformer = BertModel(config)
-        self.lm_head = nn.Linear(config.n_embd, config.vocab_size)
-        self.image_ff = nn.Linear(2048, config.n_embd)
-        self.image_inverse_ff = nn.Linear(config.n_embd, 2048)
+        self.lm_head = nn.Linear(config.hidden_size, config.vocab_size)
+        self.image_ff = nn.Linear(2048, config.hidden_size)
+        self.image_inverse_ff = nn.Linear(config.hidden_size, 2048)
 
         self.init_weights()
         self.tie_weights()
@@ -16,6 +18,25 @@ class UAIC(BertPreTrainedModel):
     def tie_weights(self):
         self._tie_or_clone_weights(self.lm_head, self.transformer.embeddings.word_embeddings)
 
-    def forward(self, input_embs, labels=None):
-        
+    def forward(self, input_embs, token_type_ids=None, labels=None):
+        transformer_outputs = self.transformer(inputs_embeds=input_embs, token_type_ids=token_type_ids)
+        hidden_states = transformer_outputs[0]
 
+        lm_logits = self.lm_head(hidden_states)
+        outputs = (lm_logits,) + transformer_outputs[1:]
+
+        if labels is not None:
+            loss_fct = CrossEntropyLoss()
+            loss = loss_fct(lm_logits, labels)
+            outputs = (loss,) + outputs
+        
+        return outputs 
+
+
+if __name__ == "__main__":
+    configration = BertConfig()
+    model = UAIC(configration)
+    # batch_size dim can not be forgot
+    input_embs = torch.rand(5, 768).view(1, -1, 768)
+    output = model(input_embs)
+    print(output[0].size())

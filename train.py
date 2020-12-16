@@ -3,12 +3,15 @@ import torch
 import os 
 
 from transformers import BertTokenizer, BertForMaskedLM 
+from model import UAIC 
+
+
 
 def train():
     model_path = 'model'
 
     tokenizer = BertTokenizer.from_pretrained(model_path)
-    model = BertForMaskedLM.from_pretrained(model_path)
+    model = UAIC.from_pretrained(model_path)
 
     
 

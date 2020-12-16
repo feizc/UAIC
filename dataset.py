@@ -35,9 +35,10 @@ class BagWordsDataset(Dataset):
         return len(self.captions['annotations'])
 
 
+
 if __name__ == "__main__":
     path = 'data'
     tokenizer = BertTokenizer('data/vocab.txt')
     data_set = BagWordsDataset(path, tokenizer)
-    img, label = data_set[0]
+    img, label = data_set[0] 
 
