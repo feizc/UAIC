@@ -35,6 +35,12 @@ class BagWordsDataset(Dataset):
         return len(self.captions['annotations'])
 
 
+class UAICDataset(Dataset):
+
+    "output: image region, input txt, output txt"
+    
+
+
 
 if __name__ == "__main__":
     path = 'data'

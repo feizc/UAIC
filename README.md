@@ -3,13 +3,17 @@
 This repository contains the implementation of paper Faster and Better: Uncertainty-aware Image Caption Generation. 
 
 
-Our model consists of two module: 
+### Our model consists of two module: 
 
-##1. Uncertainty Measurement: image conditioned bag-of-words 
+1. Uncertainty Measurement: image conditioned bag-of-words 
 
 input: image regions, output: distribution of word vocabulary 
 
-##2. Caption Generation: uncertainty-aware image caption 
+2. Caption Generation: uncertainty-aware image caption 
+
+input: image region, last stage sequence, out put: next stage sequence 
+
+
 
 
 

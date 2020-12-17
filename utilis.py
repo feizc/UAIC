@@ -2,9 +2,11 @@ import json
 import numpy as np 
 import os 
 from collections import Counter 
-import nltk
+import nltk 
 
-# Create vocabulary from dataset
+
+
+# Create vocabulary from dataset conditioned on the min word freq 
 def create_vocabulary(path, min_word_freq=5):
     train_path = os.path.join(path, 'captions_train2014.json')
 
@@ -55,7 +57,41 @@ class AverageMeter(object):
         self.avg = self.sum / self.count 
 
 
+# Generate training data pair 
+def create_data_pair(data_path):
+    uncertainty_json = 
+
+    a = [0.3, 0.2, 0.4, 0.8, 0.1, 0.5]
+    b = [0]*len(a)
+    tree_construct(a, 0, len(a)-1, b, 0)
+    print(b)
+    # print(b.argmax())
+
+
+# create the binary tree structure recursively 
+def tree_construct(uncertainty_list, left, right, res, level): 
+    if left > right:
+        return 
+    if left == right:
+        res[left] = level 
+        return 
+    idx = left
+    max_value = uncertainty_list[idx]
+    current_idx = left + 1  
+    while current_idx <= right:
+        if uncertainty_list[current_idx] > max_value:
+            idx =  current_idx
+            max_value = uncertainty_list[current_idx]
+        current_idx += 1
+    res[idx] = level
+    tree_construct(uncertainty_list, left, idx-1, res, level+1)
+    tree_construct(uncertainty_list, idx+1, right, res, level+1)
+    return 
+
 
 if __name__ == "__main__":
-    train_path = 'data/annotations'
-    create_vocabulary(train_path)
+    # train_path = 'data/annotations'
+    # create_vocabulary(train_path)
+
+    data_path = 'data'
+    create_data_pair(data_path)
