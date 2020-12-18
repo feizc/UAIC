@@ -59,12 +59,26 @@ class AverageMeter(object):
 
 # Generate training data pair 
 def create_data_pair(data_path):
-    uncertainty_json = 
+    uncertainty_json_path = os.path.join(data_path, 'uncertainty_captions.json')
+    with open(uncertainty_json_path, 'r', encoding='utf-8') as j:
+        uncertainty_json = json.load(j)
+    train_data = uncertainty_json['annotations']
+    data_pair_list = []
+    for sample in train_data:
+        print(sample)
+        sample_uncertainty = sample['uncertainty'] 
+        caption_uncertainty = sample['caption']
+        order_list = [0] * len(sample_uncertainty)
+        tree_construct(sample_uncertainty, 0, len(order_list)-1, order_list, 0)
+        print(order_list)
+        max_iter = 0 
+        for x in order_list:
+            max_iter = max(x, max_iter)
+        
+        for i in range(max_iter):
+            break
+        
 
-    a = [0.3, 0.2, 0.4, 0.8, 0.1, 0.5]
-    b = [0]*len(a)
-    tree_construct(a, 0, len(a)-1, b, 0)
-    print(b)
     # print(b.argmax())
 
 
