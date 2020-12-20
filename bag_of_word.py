@@ -92,7 +92,7 @@ def train():
             #print(loss, acc)
             avg_acc.update(acc)
             print('acc: ', acc)
-            #break
+            break
             iteration += 1 
         torch.save({'model':model.state_dict(), 'optimizer':optimizer.state_dict()},\
                     '%s/epoch%d_acc_%.3f'%(model_path, epoch, avg_acc.avg))

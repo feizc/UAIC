@@ -5,7 +5,6 @@ from collections import Counter
 import nltk 
 
 
-
 # Create vocabulary from dataset conditioned on the min word freq 
 def create_vocabulary(path, min_word_freq=5):
     train_path = os.path.join(path, 'captions_train2014.json')
@@ -65,19 +64,45 @@ def create_data_pair(data_path):
     train_data = uncertainty_json['annotations']
     data_pair_list = []
     for sample in train_data:
-        print(sample)
+        # print(sample)
         sample_uncertainty = sample['uncertainty'] 
         caption_uncertainty = sample['caption']
         order_list = [0] * len(sample_uncertainty)
         tree_construct(sample_uncertainty, 0, len(order_list)-1, order_list, 0)
-        print(order_list)
+        # print(order_list)
         max_iter = 0 
         for x in order_list:
             max_iter = max(x, max_iter)
         
+        caption = caption_uncertainty.split()
         for i in range(max_iter):
-            break
-        
+            tmp_sample = {}
+            tmp_sample['image_id'] = sample['image_id']
+            input_txt = ''
+            input_num = 0
+            output_txt = ''
+            output_num = 0
+            for j in range(len(caption)):
+                if order_list[j] <= i:
+                    input_txt = input_txt + caption[j] + ' '
+                    input_num += 1 
+                if order_list[j] == i+1: 
+                    while input_num - output_num >= 1:
+                        output_txt = output_txt + '[NONE] '
+                        output_num += 1 
+                    output_txt = output_txt + caption[j] + ' ' 
+                    output_num += 1 
+                #else:
+                #    output_txt = output_txt + '[NONE] ' 
+            while input_num - output_num >= 0:
+                output_txt = output_txt + '[NONE] '
+                output_num += 1 
+            tmp_sample['input'] = input_txt
+            tmp_sample['output'] = output_txt
+            data_pair_list.append(tmp_sample)
+        break
+    with open(os.path.join(data_path, 'data_pair.json'), 'w', encoding='utf-8') as f:
+        json.dump(data_pair_list, f, indent=4)
 
     # print(b.argmax())
 

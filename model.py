@@ -2,6 +2,7 @@ from transformers import *
 import torch.nn as nn
 import torch 
 from torch.nn import CrossEntropyLoss 
+import os 
 
 
 class UAIC(BertPreTrainedModel):
@@ -18,8 +19,8 @@ class UAIC(BertPreTrainedModel):
     def tie_weights(self):
         self._tie_or_clone_weights(self.lm_head, self.transformer.embeddings.word_embeddings)
 
-    def forward(self, input_embs, token_type_ids=None, labels=None):
-        transformer_outputs = self.transformer(inputs_embeds=input_embs, token_type_ids=token_type_ids)
+    def forward(self, input_embs, labels=None):
+        transformer_outputs = self.transformer(inputs_embeds=input_embs)
         hidden_states = transformer_outputs[0]
 
         lm_logits = self.lm_head(hidden_states)
@@ -27,15 +28,18 @@ class UAIC(BertPreTrainedModel):
 
         if labels is not None:
             loss_fct = CrossEntropyLoss()
-            loss = loss_fct(lm_logits, labels)
+            loss = loss_fct(lm_logits.squeeze(0), labels)
             outputs = (loss,) + outputs
         
         return outputs 
 
 
 if __name__ == "__main__":
-    configration = BertConfig()
+    model_path = 'ckpt'
+    configration = BertConfig(vocab_size=10876)
     model = UAIC(configration)
+    torch.save(model.state_dict(), os.path.join(model_path, 'pytorch_model.bin'))
+    model.config.to_json_file(os.path.join(model_path, 'config.json'))
     # batch_size dim can not be forgot
     input_embs = torch.rand(5, 768).view(1, -1, 768)
     output = model(input_embs)
