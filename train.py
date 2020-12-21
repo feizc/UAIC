@@ -15,6 +15,7 @@ def train():
     # ckpt_path = 'ckpt'
     lr = 1e-4
     epochs = 15 
+    gradient_accumulation_steps = 5 
 
     tokenizer = BertTokenizer.from_pretrained(model_path)
     tokenizer.add_special_tokens(SPECIAL_TOKENS_DICT)
@@ -31,7 +32,8 @@ def train():
     train_data = UAICDataset(data_path, tokenizer)
     # bos, eos, none, img_label, txt_label = tokenizer.convert_tokens_to_ids(SPECIAL_TOKENS[:-1])
     for epoch in range(epochs):
-
+        
+        iteration = 1
         for img, input_txt, output, token_type_ids in train_data:
             # print(input.size(), output.size(), img.size()) 
             img = img.to(device)
@@ -48,10 +50,13 @@ def train():
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
 
-            optimizer.step()
-            optimizer.zero_grad()
+            if iteration % gradient_accumulation_steps == 0: 
+                optimizer.step()
+                optimizer.zero_grad()
+            
             print(loss.item())
-
+            iteration += 1
+            
 
     
     torch.save(model.state_dict(), os.path.join(model_path, 'pytorch_model.bin'))
