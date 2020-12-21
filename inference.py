@@ -15,7 +15,7 @@ def generate_cap(img_feature, model, tokenizer):
 
 # concatenate the substage to total sentence 
 
-
+# evaluate the ckpt 
 def eval():
     ckpt_path = 'ckpt'
     data_path = 'data'
