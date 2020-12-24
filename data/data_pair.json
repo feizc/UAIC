@@ -1,0 +1,22 @@
+[
+    {
+        "image_id": 318556,
+        "input": "well ",
+        "output": "and decorated "
+    },
+    {
+        "image_id": 318556,
+        "input": "and well decorated ",
+        "output": "clean [NONE] [NONE] bathroom "
+    },
+    {
+        "image_id": 318556,
+        "input": "clean and well decorated bathroom ",
+        "output": "very [NONE] [NONE] [NONE] empty [NONE] "
+    },
+    {
+        "image_id": 318556,
+        "input": "very clean and well decorated empty bathroom ",
+        "output": "A [NONE] [NONE] [NONE] [NONE] [NONE] [NONE] [NONE] "
+    }
+]

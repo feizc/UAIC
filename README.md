@@ -36,10 +36,12 @@ Detection features are computed with the code provided by [1]. To reproduce our 
 
 ### Model Training: 
 
-1. Uncertainty Measurement: image conditioned bag-of-words 
+1. Uncertainty measurement and generate the data pair  
 
-2. Caption Generation: uncertainty-aware image caption  
+2. Uncertainty-aware image captioning model optimization   
 
+### Model Inference: 
 
+generate candidate from saved ckpt and evalute the model performance 
 
 
