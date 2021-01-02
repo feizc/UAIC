@@ -1,17 +1,22 @@
 # Uncertainty-aware Image Caption Generation 
 
-This repository contains the implementation of paper: Uncertainty-aware Image Captioning. 
+This repository contains the implementation of paper: Uncertainty-Aware Image Captioning (UAIC). 
 
 
 ### Our model consists of two module: 
 
 1. Uncertainty Measurement: image conditioned bag-of-words 
 
-input: image regions, output: distribution of word vocabulary 
+input: image regions 
 
-2. Caption Generation: uncertainty-aware image caption 
+output: distribution of word vocabulary 
 
-input: image region, last stage sequence, out put: next stage sequence  
+
+2. Caption Generation: unified Transformer-based image caption 
+
+input: image region, last stage sequence  
+
+output: next stage sequence  
 
 
 ### The main contirbutions: 
